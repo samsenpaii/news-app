@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NewsItems from './NewsItems'
 
 export  class News extends Component {
-  articales =[
+  articles =[
     {
       "source": { "id": "espn-cric-info", "name": "ESPN Cric Info" },
       "author": null,
@@ -28,10 +28,16 @@ export  class News extends Component {
   constructor(){
     super();
     this.state={
-      articales : this.articales,
+      articles : this.articles,
       loading : false
     }
+  }
 
+  async componentDidMount(){
+    let url ="https://newsapi.org/v2/top-headlines?country=in&apiKey=ccec2138afb34d03874b4aa9e947a4ea";
+    let data = await fetch(url);
+    let parsedData = await data.json()
+    this.setState({articles : parsedData.articles})
   }
 
   render() {
@@ -40,9 +46,9 @@ export  class News extends Component {
       <div className='container my-3'>
         <h1>TOP NEWS </h1>
           <div className="row">
-            {this.state.articales.map((elements)=>{
+            {this.state.articles.map((elements)=>{
               return <div className="col-md-4" key={elements.url}>
-              <NewsItems  title={elements.title.slice(0 , 45)} discription={elements.description.slice(0 , 88)} imageUrl={elements.urlToImage} newsUrl={elements.url}/>
+              <NewsItems  title={elements.title?elements.title.slice(0, 45):""} discription={elements.description?elements.description.slice(0, 88):""} imageUrl={elements.urlToImage} newsUrl={elements.url}/>
              </div>
             })}
               
